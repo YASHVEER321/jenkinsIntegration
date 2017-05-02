@@ -1,0 +1,10 @@
+#!/bin/sh
+
+ssh -t -t root@172.104.50.150 <<EOF
+  cd ~/test/jankinstest
+  git pull 
+  npm install
+  pm2 stop all
+  pm2 start app.js
+  exit
+EOF

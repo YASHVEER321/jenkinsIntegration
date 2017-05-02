@@ -1,0 +1,109 @@
+
+machine:
+
+  timezone:
+    Asia/Kolkata # Set the timezon
+
+  # Version of node to use
+  node:
+    version:
+      6.9.1
+
+#   # Override /etc/hosts
+  hosts:
+    circlehost: 127.0.0.1
+    lensclues.sia.co.in: 139.59.44.184
+
+#   Add some environment variables
+#   environment:
+#     CIRCLE_ENV: ecommerce
+#     DATABASE_URL: mongodb://localhost/ecommerce
+# ## Customize checkout
+checkout:
+  post:
+    - git submodule sync
+    - git submodule update --init # use submodules
+
+# ## Customize dependencies
+dependencies:
+  pre:
+    - npm install express # install from a different package manager
+    - npm i -g mocha
+
+
+#   override:
+#     - npm install: # note ':' here
+#         timeout: 180 # fail if command has no output for 3 minutes
+#         # IMPORTANT NOTE: ^^ the timeout modifier above must be
+#         # double indented (four spaces) from the previous line
+  
+dependencies:
+  override:
+    - sudo apt-get purge mongodb-org*
+    - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+    - echo "deb http://repo.mongodb.org/apt/ubuntu precise/mongodb-org/3.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list
+    - sudo apt-get update
+    - sudo apt-get install -y mongodb-org
+    - sudo service mongod restart
+
+# ## Customize database setup
+# database:
+#   override:
+#     # replace CircleCI's generated database.yml
+#     - cp config/database.yml.ci config/database.yml
+#     - bundle exec rake db:create db:schema:load
+
+# ## Customize test commands
+test:
+  override:
+    - echo 'no tests, just say us Okay!'
+# test:
+#   override:
+#     - npm test
+
+# ## Customize deployment commands
+deployment:
+  production:
+    branch: local
+    commands:
+      - ./deploy_pro.sh
+
+## Custom notifications
+# notify:
+#   webhooks:
+#     # A list of hashes representing hooks. Only the url field is supported.
+#     - url: https://lensclues.sia.co.in/hook
+
+
+# machine:
+#   timezone:
+#    Asia/Kolkata  # Set the timezo
+#   # Version of node to use
+#  node:
+#       version: 6.9.1
+
+
+#   Override /etc/hosts
+#   hosts:
+#     circlehost: 127.0.0.1
+#     lensclues.sia.co.in: 139.59.44.184
+
+# deployment:
+#   production:
+#     branch: local
+#     commands:
+#       - ./deploy_pro.sh
+
+# # test:
+# #    override:
+# #       - echo 'no tests, just say us Okay!'
+
+# test:
+#   override:
+#     - npm test
+
+# ## Custom notifications
+# # notify:
+# #   webhooks:
+# #     # A list of hashes representing hooks. Only the url field is supported...
+# #     - url: https://lensclues.sia.co.in/hook
